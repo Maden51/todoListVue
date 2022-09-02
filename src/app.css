@@ -1,0 +1,119 @@
+body {
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 18px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+.todo__wrapper {
+  width: 1900px;
+  margin: 0 auto;
+}
+
+.todo__container {
+  padding: 40px 80px;
+  background-color: rgb(74, 183, 187);
+  border: 3px solid rgb(226, 153, 153);
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.todo__title {
+  text-align: center;
+}
+
+.todo__header {
+  width: 1000px;
+  position: relative;
+}
+
+.error {
+  color: red;
+  position: absolute;
+  left: 17%;
+  margin-top: 5px;
+}
+
+.todo__header input {
+  margin: 0 20px;
+  width: 500px;
+}
+
+input {
+  font-size: 18px;
+  padding: 10px;
+  border: none;
+  outline: none;
+}
+
+.btn {
+  padding: 10px;
+  font-size: 18px;
+  background-color: white;
+  border: none;
+  cursor: pointer;
+}
+
+.btn:hover {
+  background-color: rgba(168, 168, 168, 0.507);
+}
+
+.todo__list {
+  margin-top: 30px;
+}
+
+.todo__item {
+  width: 1000px;
+  display: grid;
+  align-items: center;
+  grid-template-columns: 7fr repeat(2, 1fr);
+  grid-template-rows: 1fr;
+  grid-column-gap: 10px;
+  grid-row-gap: 0px;
+}
+
+.todo__item:nth-child(n + 2) {
+  margin-top: 15px;
+}
+
+.todo__item-text {
+  background-color: #fff;
+  padding: 10px;
+}
+
+.not-ready {
+  color: red;
+}
+
+.ready {
+  color: rgb(6, 255, 6);
+}
+
+.icon-btn {
+  width: 40px;
+  cursor: pointer;
+  background-color: #fff;
+  border: none;
+  padding: 5px;
+}
+
+.icon-btn:hover {
+  background-color: rgba(168, 168, 168, 0.507);
+}
+
+.icon-btn:nth-child(-n + 1) {
+  margin-right: 5px;
+}
+
+.todo__cancel-btn svg {
+  fill: none;
+  stroke: #000;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 2px;
+}
+
+.todo__item-state label,
+.todo__item-state input {
+  cursor: pointer;
+}
