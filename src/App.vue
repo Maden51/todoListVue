@@ -9,14 +9,16 @@
           v-on:keydown.enter="addTodoItem"
           name="name" 
           id="name"
-          required 
           placeholder="Введите название..."
         />
         <button class="todo__add-btn btn" @click="addTodoItem">Добавить задачу</button>
+        <!-- Выдаёт ошибку при попытке ввести пустое поле -->
         <div class="error" v-if="error">{{error}}</div>
       </div>
       <div class="todo__list">
-        <div class="todo__item" v-for="(item, idx) in todoItems" v-bind:key="idx">
+        <!-- Отображение элементов из списка задач -->
+        <div class="todo__item" v-for="(item, index) in todoItems" v-bind:key="index">
+          <!-- Отображает текстовые задачи с состоянием -->
           <template v-if="item.edit === false">
             <span class="todo__item-text">{{item.name}}</span>
             <div class="todo__item-control">
@@ -28,15 +30,17 @@
               </button>
             </div>
             <div class="todo__item-state">
-              <input type="checkbox" :id="idx" v-model="item.ready" />
-              <label class="not-ready" :for="idx" v-if="item.ready === false">Не готово</label>
-              <label class="ready" :for="idx" v-else>Готово</label>
+              <!-- Отображает разное состояние в зависимости от значения item.ready -->
+              <input type="checkbox" :id="index" v-model="item.ready" />
+              <label class="not-ready" :for="index" v-if="!item.ready">Не готово</label>
+              <label class="ready" :for="index" v-else>Готово</label>
             </div>
           </template>
+          <!-- Отображение инпутов во время редактирования -->
           <template v-else>
-            <input v-model="editedName" autofocus v-on:keydown.enter="saveChanges(item)" />
+            <input v-model="item.name" autofocus />
             <div class="todo__edit-control">
-              <button class="todo__save-btn icon-btn" @click="saveChanges(item)">
+              <button class="todo__save-btn icon-btn" @click="saveChanges(item, index)">
                 <svg viewBox="0 0 32 32" with="24px" height="24px"  xmlns="http://www.w3.org/2000/svg"><title/><g data-name="Layer 49" id="Layer_49"><path d="M29,31H3a1,1,0,0,1-1-1V2A1,1,0,0,1,3,1H23a1,1,0,0,1,.71.29l6,6A1,1,0,0,1,30,8V30A1,1,0,0,1,29,31ZM4,29H28V8.41L22.59,3H4Z"/><path class="cls-1" d="M20,9H10A1,1,0,0,1,9,8V2a1,1,0,0,1,1-1H20a1,1,0,0,1,1,1V8A1,1,0,0,1,20,9ZM11,7h8V3H11Z"/><path class="cls-1" d="M23,25H9a1,1,0,0,1-1-1V14a1,1,0,0,1,1-1H23a1,1,0,0,1,1,1V24A1,1,0,0,1,23,25ZM10,23H22V15H10Z"/></g></svg>
               </button>
               <button class="todo__cancel-btn icon-btn" @click="cancelChanges(item)">
@@ -49,7 +53,6 @@
     </div>
   </div>
 </template>
-
 <script>
 
 
@@ -59,35 +62,41 @@ export default {
     return {
       todoName: '',
       todoItems: [],
-      editedName: '',
+      // beforeEdit: '',
       error: ''
     }
   },
   methods: {
+    // Добавляет новую задачу в в массив todoItems c валидацией на пустое поле
     addTodoItem() {
-      const newTodoItem = {name: this.todoName, ready: false, edit: false};
+      const newTodoItem = {name: this.todoName, ready: false, edit: false, beforeEdit: this.todoName};
       if(this.todoName) {
         this.todoItems.push(newTodoItem);
         this.todoName = '';
         this.error = '';
       } else {
-        this.error = 'Небходимо название задачи'
+        this.error = 'Необходимо название задачи'
       }
     },
+    // Удаляет задачу из массива с помощью филтрации.
     deleteTodoItem(itemToDelete) {
       this.todoItems = this.todoItems.filter(todoItem => todoItem != itemToDelete);
     },
+    // Переводит элемент списка в режим редактирования.
     editTodoItem(itemToEdit) {
-      this.editedName = itemToEdit.name;
+      this.beforeEdit = itemToEdit.name;
       itemToEdit.edit = true;
     },
+    // Сохраняет изменения при редактировании и возвращает к исходному виду.
     saveChanges(itemToEdit) {
-      if(this.editedName) {
-        itemToEdit.name = this.editedName;
+        if(itemToEdit.name.trim() == '') {
+          itemToEdit.name = this.beforeEdit;
+        }
         itemToEdit.edit = false;
-      }
     },
+    // Отменяет изменения совершённые при редактировании и возвращает к исходному виду.
     cancelChanges(itemToEdit) {
+      itemToEdit.name = itemToEdit.beforeEdit;
       itemToEdit.edit = false;
     }
   }
